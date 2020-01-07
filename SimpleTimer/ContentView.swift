@@ -9,8 +9,16 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var cnt = 0
     var body: some View {
-        Text("Hello, World!")
+        NavigationView{
+            Form{
+                Text("You touched me \(cnt) time\(cnt==1 ? "" : "s")")
+                Button("Touch me!"){
+                    self.cnt += 1
+                }
+            }.navigationBarTitle( "Touching" )
+        }
     }
 }
 
