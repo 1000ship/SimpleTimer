@@ -7,11 +7,13 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
     
     @State var cnt : Int = 0
     @State var sec : Int = 0
+    @State var timer : Publishers.Autoconnect<Timer.TimerPublisher> = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         NavigationView{
@@ -28,7 +30,7 @@ struct ContentView: View {
                                 Text("\(sec) seconds")
                             }
                         )
-                        NavigationLink(destination: TimerView(sec: sec)) {
+                        NavigationLink(destination: TimerView(sec: sec, timer: timer)) {
                             Text("Go On")
                         }
                         Image("apple").resizable().scaleEffect(0.3, anchor: .top)
@@ -42,9 +44,15 @@ struct ContentView: View {
 }
 
 struct TimerView: View {
-    let sec : Int
+    @State var sec : Int
+    var timer : Publishers.Autoconnect<Timer.TimerPublisher>
+    
     var body: some View {
         Text("HELLO \(sec)")
+        .onReceive(timer){ _ in
+            self.sec -= 1
+            print(self.sec)
+        }
     }
 }
 
